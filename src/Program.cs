@@ -11,6 +11,7 @@ Raylib.SetExitKey(KeyboardKey.Null);
 var dpi = Raylib.GetWindowScaleDPI();
 Console.WriteLine($"DPI: {dpi}");
 
+var characterSpacing = 1;
 var fontSize = 16;
 var font = Raylib.LoadFontEx("/System/Library/Fonts/Monaco.ttf", (int)(fontSize * dpi.Y), [], 512);
 // var font = Raylib.LoadFontEx("/System/Library/Fonts/Supplemental/Times New Roman.ttf", (int)(fontSize * dpi.Y), [], 512);
@@ -34,16 +35,22 @@ while (!Raylib.WindowShouldClose())
         var vec5 = vec4;
         foreach (var line in lines)
         {
-            var size = Raylib.MeasureTextEx(font, line, fontSize, 1);
-            Raylib.DrawTextEx(font, line, vec5, fontSize, 1, Color.White);
-            vec5.Y += size.Y;
+            var vec6 = vec5;
+            foreach (var ch in line)
+            {
+                var chString = ch.ToString();
+                var size = Raylib.MeasureTextEx(font, chString, fontSize, 1);
+                Raylib.DrawTextEx(font, chString, vec6, fontSize, 0, Color.White);
+                vec6.X += size.X + characterSpacing;
+            }
+            vec5.Y += fontSize;
         }
     }
     else
     {
         // draw text
         Raylib.SetTextLineSpacing(fontSize);
-        Raylib.DrawTextEx(font, chars, vec4, fontSize, 1, Color.LightGray);
+        Raylib.DrawTextEx(font, chars, vec4, fontSize, characterSpacing, Color.LightGray);
     }
 
     // fps
